@@ -14,6 +14,8 @@ repositories {
 dependencies {
     testImplementation(kotlin("test-junit"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
+    // RxJava
+    implementation("io.reactivex.rxjava2:rxjava:2.2.10")
 }
 
 tasks.test {
