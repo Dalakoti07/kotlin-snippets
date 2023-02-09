@@ -11,9 +11,16 @@ fun flowFrom2(elem: String) = flowOf(1, 2, 3)
     .onEach { delay(1000) }
     .map { "${it}_${elem} " }
 
+/**
+ * https://kt.academy/article/cc-flatmap
+ */
+
 suspend fun main() {
     // given a list of string and each string can generate a flow of strings
     // flatmap flatten the string array in one level
+    /**
+     * [flatMapConcat] is same as [flatMap] (this is deprecated)
+     */
     var resultantFlow = flowOf("A", "B", "C")
         .flatMapConcat { flowFrom(it) }
     resultantFlow.collect { println(it) }
