@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.32"
+    kotlin("jvm") version "1.6.0"
 }
 
 group = "me.dalakoti07"
@@ -13,7 +13,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test-junit"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
+    implementation("io.github.hoc081098:FlowExt:0.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     // RxJava
     implementation("io.reactivex.rxjava2:rxjava:2.2.10")
 }

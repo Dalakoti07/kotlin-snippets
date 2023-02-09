@@ -13,8 +13,8 @@ fun main() {
   runBlocking {
     launch {
       for (fruit in fruitArray) {
-        val wasSent = kotlinChannel.offer(fruit)
-        if (wasSent) {
+        val wasSent = kotlinChannel.trySend(fruit)
+        if (wasSent.isSuccess) {
           println("Sent: $fruit")
         } else {
           println("$fruit wasn't sent")

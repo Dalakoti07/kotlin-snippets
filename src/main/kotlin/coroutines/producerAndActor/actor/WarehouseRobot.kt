@@ -1,6 +1,9 @@
 package coroutines.producerAndActor.actor
 
+/*
+
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.launch
 
@@ -33,6 +36,7 @@ class WarehouseRobot(private val id: Int,
     println("Robot #$id processed following packages:$packageIds")
   }
 
+  @OptIn(ObsoleteCoroutinesApi::class)
   private fun processItems(items: List<Package>) {
     val actor = GlobalScope.actor<Package>(
         capacity = ROBOT_CAPACITY
@@ -40,8 +44,8 @@ class WarehouseRobot(private val id: Int,
 
       var hasProcessedItems = false
 
-      while (!packages.isEmpty()) {
-        val currentPackage = poll()
+      while (packages.isNotEmpty()) {
+        val currentPackage = tryReceive()
 
         currentPackage?.run {
           organize(this)
@@ -64,3 +68,4 @@ private fun organize(warehousePackage: Package) =
     println("Organized package " +
         "${warehousePackage.id}:" +
         warehousePackage.name)
+*/

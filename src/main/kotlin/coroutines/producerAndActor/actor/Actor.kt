@@ -1,5 +1,6 @@
 package coroutines.producerAndActor.actor
 
+/*
 fun main() {
 
   val items = listOf(
@@ -23,3 +24,4 @@ fun main() {
   initialRobot.organizeItems()
   Thread.sleep(5000)
 }
+*/

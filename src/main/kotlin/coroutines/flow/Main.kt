@@ -2,6 +2,7 @@ package coroutines.flow
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -23,7 +24,9 @@ fun main() {
         .map { it.split(" ") }
         .map { it.last() }
         .flowOn(Dispatchers.IO)
-        .delayEach(100)
+        .onEach {
+            delay(100)
+        }
         .catch { }
         .flowOn(Dispatchers.Default)
         .collect { value ->

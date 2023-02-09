@@ -26,8 +26,8 @@ fun main() {
 
     launch {
       repeat(fruitArray.size) {
-        val fruit = kotlinChannel.poll()
-        if (fruit != null) {
+        val fruit = kotlinChannel.tryReceive()
+        if (fruit.isSuccess) {
           println("Received: $fruit")
         } else {
           println("Channel is empty")

@@ -6,10 +6,12 @@ import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.random.Random
+/*
 
 fun main() {
   // You're using isClosedForSend and offer
-  /*val producer = GlobalScope.produce(capacity = 10) {
+  */
+/*val producer = GlobalScope.produce(capacity = 10) {
     while (isActive) {
       if (!isClosedForSend) {
         val number = Random.nextInt(0, 20)
@@ -20,9 +22,11 @@ fun main() {
         }
       }
     }
-  }*/
+  }*//*
+
 
   // Using isFull and offer
+*/
 /*  val producer = GlobalScope.produce(capacity = 10) {
     while (isActive) {
       val number = Random.nextInt(0, 20)
@@ -35,7 +39,8 @@ fun main() {
       }
     }
   }
-  Thread.sleep(30L)*/
+  Thread.sleep(30L)*//*
+
 
   // Using blocking send and isActive
   val producer = GlobalScope.produce(capacity = 10) {
@@ -70,4 +75,4 @@ fun main() {
 
   Thread.sleep(30L)
 
-}
+}*/
