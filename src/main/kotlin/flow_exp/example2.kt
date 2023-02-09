@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 
 /**
- * infinite flow it goes and goes
+ * infinite flow it goes and goes, producer is infinitely producing it
  */
 suspend fun main(){
 
