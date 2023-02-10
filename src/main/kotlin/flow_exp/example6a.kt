@@ -7,7 +7,7 @@ fun flowFrom(elem: String) = flowOf(1, 2, 3)
     .onEach { delay(100) }
     .map { "${it}_${elem} " }
 
-fun createSpecialFlow(elem: String): Flow<String>{
+fun createSpecialFlowWhichIsOverlapping(elem: String): Flow<String>{
     val flowDelay: Long = if (elem == "A") 2000 else 1000
     return flowOf(1,2,3,4).onEach {
         delay(flowDelay)
@@ -47,7 +47,7 @@ suspend fun main() {
      * but flatMap does concat them
      */
     resultantFlow = flowOf("A","B").flatMapConcat {
-        createSpecialFlow(it)
+        createSpecialFlowWhichIsOverlapping(it)
     }
     resultantFlow.collect {
         println(it)

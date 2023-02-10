@@ -1,6 +1,5 @@
 package flow_exp
 
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 suspend fun main() {
@@ -52,7 +51,7 @@ suspend fun main() {
      * So concat basically means first all values from flowA would be taken and flowB would be concatenated at its end no matter what
      */
     resultantFlow = flowOf("A","B").flatMapMerge {
-        createSpecialFlow(it)
+        createSpecialFlowWhichIsOverlapping(it)
     }
     resultantFlow.collect {
         println(it)
