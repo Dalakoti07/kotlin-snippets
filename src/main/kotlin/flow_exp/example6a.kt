@@ -52,6 +52,7 @@ suspend fun main() {
     println("---------------------")
     /**
      * So concat basically means first all values from flowA would be taken and flowB would be concatted at its end no matter what
+     * but flatMap does concat them
      */
     resultantFlow = flowOf("A","B").flatMapConcat {
         createSpecialFlow(it)
