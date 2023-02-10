@@ -2,7 +2,6 @@ package flow_exp
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 
 suspend fun main(){
 

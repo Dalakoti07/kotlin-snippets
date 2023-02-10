@@ -3,9 +3,6 @@ package flow_exp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
-/**
- * https://kt.academy/article/cc-flatmap
- */
 suspend fun main() {
     /**
      * The typical use of flatMapMerge is when we need to request data for each element in a flow. For instance,
@@ -52,7 +49,7 @@ suspend fun main() {
 
     println("---------------------")
     /**
-     * So concat basically means first all values from flowA would be taken and flowB would be concatted at its end no matter what
+     * So concat basically means first all values from flowA would be taken and flowB would be concatenated at its end no matter what
      */
     resultantFlow = flowOf("A","B").flatMapMerge {
         createSpecialFlow(it)

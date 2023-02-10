@@ -7,10 +7,6 @@ fun flowFrom(elem: String) = flowOf(1, 2, 3)
     .onEach { delay(100) }
     .map { "${it}_${elem} " }
 
-fun flowFrom2(elem: String) = flowOf(1, 2, 3)
-    .onEach { delay(1000) }
-    .map { "${it}_${elem} " }
-
 fun createSpecialFlow(elem: String): Flow<String>{
     val flowDelay: Long = if (elem == "A") 2000 else 1000
     return flowOf(1,2,3,4).onEach {
@@ -19,10 +15,6 @@ fun createSpecialFlow(elem: String): Flow<String>{
         "${elem}_$it"
     }
 }
-
-/**
- * https://kt.academy/article/cc-flatmap
- */
 
 suspend fun main() {
     // given a list of string and each string can generate a flow of strings
