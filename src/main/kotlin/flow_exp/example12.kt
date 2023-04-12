@@ -1,11 +1,6 @@
 package flow_exp
 
-import com.hoc081098.flowext.flatMapFirst
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
 /*
 SideEffect<VerifyOtpState, VerifyOtpAction> { actionFlow, stateFlow, _ ->
@@ -19,12 +14,14 @@ SideEffect<VerifyOtpState, VerifyOtpAction> { actionFlow, stateFlow, _ ->
                 enteredOtp = stateFlow.value.enteredOtp,
             )
         }
-}*/
+}
+*/
 
 // above snippet is not working,
 // if flatMapConcat is replaced by flatMapLatest then it works
 
 suspend fun main() {
+    println("........... when using concat ...........")
     flow {
         emit("saurabh")
         for (i in 1..10) {
@@ -40,4 +37,20 @@ suspend fun main() {
             println(it)
         }
 
+    println("........... when using latest ...........")
+
+    flow {
+        emit("saurabh")
+        for (i in 1..10) {
+            emit(i)
+        }
+        emit("dalakoti")
+    }
+        .filterIsInstance<Int>()
+        .flatMapLatest {
+            flowFrom("upstream:$it")
+        }
+        .collect {
+            println(it)
+        }
 }
