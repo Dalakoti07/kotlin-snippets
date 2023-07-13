@@ -1,9 +1,8 @@
 package coroutines.suspendFunctions
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
+import java.lang.Exception
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -20,7 +19,6 @@ fun main() {
     val user = getUserSuspend("101")
     println(user)
   }
-
 }
 
 fun getUserSuspend(userId:String):User{

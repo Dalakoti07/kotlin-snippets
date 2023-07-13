@@ -10,6 +10,7 @@ fun parseText(input: String): StyledTextModel? {
     val matches = regex.findAll(input)
     val styledTextIndices = mutableListOf<StyledTextModel.StyledTextIndices>()
     var currentIndex = 0
+    val cleanedText = removeTextBetweenSquareBrackets(input)
 
     for (match in matches) {
         val matchText = match.value
@@ -21,10 +22,10 @@ fun parseText(input: String): StyledTextModel? {
         val startIndex = values[0].toIntOrNull()
         val endIndex = values[1].toIntOrNull()
         if (startIndex == null) {
-            return null
+            return StyledTextModel(cleanedText)
         }
         if (endIndex == null) {
-            return null
+            return StyledTextModel(cleanedText)
         }
         var colorCode: String? = null
         var textStyle: String? = null
@@ -50,15 +51,18 @@ fun parseText(input: String): StyledTextModel? {
         currentIndex = matchEndIndex
     }
 
-    val cleanedText = removeTextBetweenSquareBrackets(input)
 
     return StyledTextModel(cleanedText, styledTextIndices)
 }
 
 
 fun main() {
-    val input = "I am saurabh[5;12;#3456] dalakoti[13;21;bold;#4567] ₹1000[23;27;#]"
+    val input = "I am saurabh dalakoti[13;#2C66E3] , you have won 1000"
+//    val input = ""
 //I am saurabh dalakoti
+
+    // [13;19;#2C66E3]
+    // [13; #2C66E3;] bold;
 
     val response = parseText(input)
     println(response)
