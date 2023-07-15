@@ -6,15 +6,9 @@ import kotlinx.coroutines.*
 val scope = CoroutineScope(Dispatchers.IO +  SupervisorJob())
 
 suspend fun main() {
-
-    runCatching {
-        printSomething2()
-    }.onFailure {
-
-    }
+    printSomething2()
     delay(100)
     printSomething()
-
 }
 
 fun printSomething2(){
