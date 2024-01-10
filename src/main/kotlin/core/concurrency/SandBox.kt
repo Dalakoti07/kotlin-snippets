@@ -24,12 +24,14 @@ class PlayGround {
             while (true){
                 delay(500)
                 println("added 4 elems")
-                items.addAll(listOf(
-                    Random.nextInt(),
-                    Random.nextInt(),
-                    Random.nextInt(),
-                    Random.nextInt(),
-                ))
+                mutex.withLock {
+                    items.addAll(listOf(
+                        Random.nextInt(),
+                        Random.nextInt(),
+                        Random.nextInt(),
+                        Random.nextInt(),
+                    ))
+                }
             }
         }
 
@@ -48,18 +50,22 @@ class PlayGround {
     }
 
     private suspend fun removeItem() {
-        if(items.isEmpty()) {
-            println("is empty")
-            return
+        mutex.withLock {
+            if(items.isEmpty()) {
+                println("is empty")
+                return
+            }
+            delay(500)
+            val last = items.last
+            println("$last removed ....")
         }
-        delay(500)
-        val last = items.last
-        println("$last removed ....")
     }
 
-    private fun removeAll() {
-        items.clear()
-        println("removeAll ....")
+    private suspend fun removeAll() {
+        mutex.withLock {
+            items.clear()
+            println("removeAll ....")
+        }
     }
 
 
