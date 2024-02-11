@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 import java.sql.DriverManager.println
-=======
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
->>>>>>> 28d97cf (some more snippets)
 
 suspend fun main() {
 
