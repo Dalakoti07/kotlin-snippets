@@ -51,19 +51,19 @@ fun parseText(input: String): StyledTextModel? {
         currentIndex = matchEndIndex
     }
 
-
     return StyledTextModel(cleanedText, styledTextIndices)
 }
 
-
 fun main() {
-    val input = "I am saurabh dalakoti[13;#2C66E3] , you have won 1000"
-//    val input = ""
-//I am saurabh dalakoti
-
-    // [13;19;#2C66E3]
-    // [13; #2C66E3;] bold;
-
-    val response = parseText(input)
-    println(response)
+    val model = StyledTextModel(
+        text = "Your referral should report to the HUB within 7 days of referral submission",
+        styledTextIndices = listOf(
+            StyledTextModel.StyledTextIndices(
+                startIndex = 46,
+                endIndex = 53,
+                color = "#12372A",
+            ),
+        ),
+    ).getAllIndicesForSpannableComposeText()
+    println("model -> $model")
 }

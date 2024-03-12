@@ -6,3 +6,4 @@ fun main(){
     val cosValue = cos(60f* (Math.PI) / 180)
     println(cosValue)
 }
+
