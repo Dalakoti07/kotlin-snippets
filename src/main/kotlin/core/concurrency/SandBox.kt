@@ -9,6 +9,7 @@ import kotlinx.coroutines.sync.withLock
 import java.util.*
 import kotlin.random.Random
 
+// todo what example is it? Make it better
 class PlayGround {
 
     private val items = LinkedList<Int>()

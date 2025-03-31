@@ -1,5 +1,6 @@
 package coroutines.errorHandling
 
+import core.regex.StyledTextModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -24,6 +25,11 @@ fun main() = runBlocking {
         throw ArithmeticException()
     }
 
+    val string = StyledTextModel.StyledTextIndices(startIndex = 12)
+    val result = string.run {
+        "Result is $startIndex"
+    }
+    println("result is $result")
     try {
         deferred.await()
         println("4. Unreachable, this statement is never executed")

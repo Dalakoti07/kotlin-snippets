@@ -17,6 +17,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     // RxJava
     implementation("io.reactivex.rxjava2:rxjava:2.2.10")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.test {

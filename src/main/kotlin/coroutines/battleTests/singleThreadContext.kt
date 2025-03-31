@@ -2,6 +2,7 @@ package coroutines.battleTests
 
 import kotlinx.coroutines.*
 
+/*
 @OptIn(DelicateCoroutinesApi::class)
 fun main() = runBlocking{
     val scope = CoroutineScope(newSingleThreadContext("meraThread"))
@@ -10,4 +11,4 @@ fun main() = runBlocking{
             println("Current thread ${Thread.currentThread()}")
         }
     }
-}
+}*/

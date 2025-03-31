@@ -4,6 +4,11 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.consumeEach
 
+// todo what is this broadcast channels?
+//  BroadcastChannel was a Kotlin coroutine-based
+//  channel used for broadcasting messages to multiple subscribers.
+//  However, it has been deprecated in favor of SharedFlow and
+//  StateFlow from Kotlin’s Flow API.
 @ObsoleteCoroutinesApi
 @ExperimentalCoroutinesApi
 fun main() {
