@@ -3,37 +3,61 @@ package prod_consumer
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.locks.Condition
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.thread
 import kotlin.concurrent.withLock
 
 // Shared buffer without synchronization
-class SharedBuffer {
+class FixedBuffer(private val capacity: Int = 10) {
     private val items = mutableListOf<Int>()
+
+    // Mutex/Lock
     private val lock = ReentrantLock()
 
-    // No synchronization around items.add(...)
+    // Condition variables
+    private val notFull: Condition = lock.newCondition()
+    private val notEmpty: Condition = lock.newCondition()
+
     fun produce(item: Int) {
         lock.withLock {
+            // If the buffer is full, wait until there's space
+            while (items.size == capacity) {
+                println("Producer waiting... (buffer full with ${items.size} items)")
+                notFull.await()
+            }
+
+            // Now we can safely add
             items.add(item)
+            println("Produced: $item | Buffer size: ${items.size}")
+
+            // Signal that there's now something to consume
+            notEmpty.signal()
         }
     }
 
-    // No synchronization around items.removeAt(...)
-    fun consume(): Int? {
+    fun consume(): Int {
         lock.withLock {
-            return if (items.isNotEmpty()) {
-                // Potential race condition, might throw an exception or return incorrect data
-                items.removeAt(0)
-            } else {
-                null
+            // If the buffer is empty, wait until there's an item
+            while (items.isEmpty()) {
+                println("Consumer waiting... (buffer empty)")
+                notEmpty.await()
             }
+
+            // Remove item
+            val removed = items.removeAt(0)
+            println("Consumed: $removed | Buffer size: ${items.size}")
+
+            // Signal producer that there's space now
+            notFull.signal()
+
+            return removed
         }
     }
 }
 
 fun main() {
-    val buffer = SharedBuffer()
+    val buffer = FixedBuffer()
     val totalItems = 1000
 
     // Producer Thread
