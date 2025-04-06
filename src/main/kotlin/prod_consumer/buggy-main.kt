@@ -2,57 +2,31 @@ package prod_consumer
 
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.BlockingQueue
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.locks.Condition
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.thread
 import kotlin.concurrent.withLock
 
+/*
 // Shared buffer without synchronization
 class FixedBuffer(private val capacity: Int = 10) {
-    private val items = mutableListOf<Int>()
+    // Create a blocking queue with fixed capacity.
+    private val queue: BlockingQueue<Int> = ArrayBlockingQueue(capacity)
 
-    // Mutex/Lock
-    private val lock = ReentrantLock()
-
-    // Condition variables
-    private val notFull: Condition = lock.newCondition()
-    private val notEmpty: Condition = lock.newCondition()
-
+    // Produces an item by putting it into the queue. Blocks if full.
     fun produce(item: Int) {
-        lock.withLock {
-            // If the buffer is full, wait until there's space
-            while (items.size == capacity) {
-                println("Producer waiting... (buffer full with ${items.size} items)")
-                notFull.await()
-            }
-
-            // Now we can safely add
-            items.add(item)
-            println("Produced: $item | Buffer size: ${items.size}")
-
-            // Signal that there's now something to consume
-            notEmpty.signal()
-        }
+        queue.put(item)  // Blocks if the queue is full.
+        println("Produced: $item | Buffer size: ${queue.size}")
     }
 
+    // Consumes an item by taking it from the queue. Blocks if empty.
     fun consume(): Int {
-        lock.withLock {
-            // If the buffer is empty, wait until there's an item
-            while (items.isEmpty()) {
-                println("Consumer waiting... (buffer empty)")
-                notEmpty.await()
-            }
-
-            // Remove item
-            val removed = items.removeAt(0)
-            println("Consumed: $removed | Buffer size: ${items.size}")
-
-            // Signal producer that there's space now
-            notFull.signal()
-
-            return removed
-        }
+        val item = queue.take()  // Blocks if the queue is empty.
+        println("Consumed: $item | Buffer size: ${queue.size}")
+        return item
     }
 }
 
@@ -94,3 +68,4 @@ fun main() {
 
     println("Main thread finished.")
 }
+ */
