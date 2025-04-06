@@ -1,24 +1,33 @@
 package prod_consumer
 
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.thread
+import kotlin.concurrent.withLock
 
 // Shared buffer without synchronization
 class SharedBuffer {
     private val items = mutableListOf<Int>()
+    private val lock = ReentrantLock()
 
     // No synchronization around items.add(...)
     fun produce(item: Int) {
-        items.add(item)
+        lock.withLock {
+            items.add(item)
+        }
     }
 
     // No synchronization around items.removeAt(...)
     fun consume(): Int? {
-        return if (items.isNotEmpty()) {
-            // Potential race condition, might throw an exception or return incorrect data
-            items.removeAt(0)
-        } else {
-            null
+        lock.withLock {
+            return if (items.isNotEmpty()) {
+                // Potential race condition, might throw an exception or return incorrect data
+                items.removeAt(0)
+            } else {
+                null
+            }
         }
     }
 }
@@ -40,12 +49,12 @@ fun main() {
 
     // Consumer Thread
     val consumer = thread {
-        val consumedCount = AtomicInteger(0)
-        while (consumedCount.get() < totalItems) {
+        var consumedCount = 0
+        while (consumedCount < totalItems) {
             val item = buffer.consume()
             if (item != null) {
                 println("Consumed: $item")
-                consumedCount.incrementAndGet()
+                consumedCount++
             } else {
                 // Race condition: Consumer finds the buffer empty even though more items might be coming
                 println("Buffer was empty unexpectedly!")
