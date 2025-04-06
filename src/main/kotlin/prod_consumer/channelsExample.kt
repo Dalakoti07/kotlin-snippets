@@ -5,6 +5,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+/*
 // FixedBuffer class that uses a Channel with fixed capacity.
 class FixedBuffer<T>(capacity: Int = 10) {
     private val channel = Channel<T>(capacity)
@@ -52,3 +53,4 @@ fun main() = runBlocking {
     consumer.join()
     println("Main coroutine finished.")
 }
+ */

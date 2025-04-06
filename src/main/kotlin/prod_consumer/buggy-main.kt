@@ -10,62 +10,98 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.thread
 import kotlin.concurrent.withLock
 
-/*
 // Shared buffer without synchronization
 class FixedBuffer(private val capacity: Int = 10) {
-    // Create a blocking queue with fixed capacity.
-    private val queue: BlockingQueue<Int> = ArrayBlockingQueue(capacity)
+    private val items = mutableListOf<Int>()
 
-    // Produces an item by putting it into the queue. Blocks if full.
+    // Mutex/Lock
+    private val lock = ReentrantLock()
+
+    // Condition variables
+    private val notFull: Condition = lock.newCondition()
+    private val notEmpty: Condition = lock.newCondition()
+
     fun produce(item: Int) {
-        queue.put(item)  // Blocks if the queue is full.
-        println("Produced: $item | Buffer size: ${queue.size}")
+        lock.withLock {
+            // If the buffer is full, wait until there's space
+            while (items.size == capacity) {
+                println("Producer waiting... (buffer full with ${items.size} items)")
+                notFull.await()
+            }
+
+            // Now we can safely add
+            items.add(item)
+            println("Produced: $item | Buffer size: ${items.size}")
+
+            // Signal that there's now something to consume
+            notEmpty.signal()
+        }
     }
 
-    // Consumes an item by taking it from the queue. Blocks if empty.
     fun consume(): Int {
-        val item = queue.take()  // Blocks if the queue is empty.
-        println("Consumed: $item | Buffer size: ${queue.size}")
-        return item
+        lock.withLock {
+            // If the buffer is empty, wait until there's an item
+            while (items.isEmpty()) {
+                println("Consumer waiting... (buffer empty)")
+                notEmpty.await()
+            }
+
+            // Remove item
+            val removed = items.removeAt(0)
+            println("Consumed: $removed | Buffer size: ${items.size}")
+
+            // Signal producer that there's space now
+            notFull.signal()
+
+            return removed
+        }
     }
 }
 
 fun main() {
-    val buffer = FixedBuffer()
-    val totalItems = 1000
+    val buffer = FixedBuffer(10)
 
-    // Producer Thread
-    val producer = thread {
-        for (i in 1..totalItems) {
-            buffer.produce(i)
-            //println("produced item $i")
-            // Simulate some processing delay
-            Thread.sleep(1)
-        }
-        println("Producer finished producing $totalItems items.")
-    }
+    // Settings: 3 producers and 3 consumers.
+    val totalProducers = 3
+    val totalConsumers = 3
+    // Each producer produces 20 items (total 60 items).
+    val itemsPerProducer = 20
+    // Each consumer consumes 20 items (total 60 items).
+    val itemsPerConsumer = 20
 
-    // Consumer Thread
-    val consumer = thread {
-        var consumedCount = 0
-        while (consumedCount < totalItems) {
-            val item = buffer.consume()
-            if (item != null) {
-                println("Consumed: $item")
-                consumedCount++
-            } else {
-                // Race condition: Consumer finds the buffer empty even though more items might be coming
-                println("Buffer was empty unexpectedly!")
+    // List to keep track of producer and consumer threads.
+    val producers = mutableListOf<Thread>()
+    val consumers = mutableListOf<Thread>()
+
+    // Launch multiple producers.
+    for (p in 1..totalProducers) {
+        val producerThread = thread(start = true) {
+            for (i in 1..itemsPerProducer) {
+                // Unique item number: calculates an overall sequence.
+                val item = (p - 1) * itemsPerProducer + i
+                buffer.produce(item)
+                Thread.sleep(50) // Fast production pace.
             }
-            Thread.sleep(2)
+            println("Producer $p finished producing $itemsPerProducer items.")
         }
-        println("Consumer finished consuming $consumedCount items.")
+        producers.add(producerThread)
     }
 
-    // Wait for both threads to finish
-    producer.join()
-    consumer.join()
+    // Launch multiple consumers.
+    for (c in 1..totalConsumers) {
+        val consumerThread = thread(start = true) {
+            for (i in 1..itemsPerConsumer) {
+                buffer.consume()
+                Thread.sleep(100) // Slower consumption pace.
+            }
+            println("Consumer $c finished consuming $itemsPerConsumer items.")
+        }
+        consumers.add(consumerThread)
+    }
+
+    // Wait for all threads to complete.
+    producers.forEach { it.join() }
+    consumers.forEach { it.join() }
 
     println("Main thread finished.")
 }
- */
