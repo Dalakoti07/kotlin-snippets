@@ -27,3 +27,10 @@ tasks.test {
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "1.8"
 }
+// Run any main() by class name:
+//   ./gradlew runMain -PmainClass=coroutines.marcin.LimitedParallelismExKt --args="1"
+tasks.register<JavaExec>("runMain") {
+    group = "application"
+    mainClass.set(project.findProperty("mainClass")?.toString() ?: "")
+    classpath = sourceSets["main"].runtimeClasspath
+}
